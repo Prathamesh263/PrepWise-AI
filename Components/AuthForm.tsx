@@ -14,11 +14,11 @@ import {
     signInWithEmailAndPassword,
 } from "firebase/auth";
 
-import { Form } from "@/Components/ui/form";
-import { Button } from "@/Components/ui/button";
+import { Form } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 
 import { signIn, signUp } from "@/lib/actions/auth.action";
-import FormField from "./FormField";
+import FormField from "@/components/FormField";
 
 const authFormSchema = (type: FormType) => {
     return z.object({
