@@ -1,9 +1,9 @@
 import React from 'react'
-import {Button} from "@/Components/ui/button";
+import {Button} from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import {dummyInterviews} from "@/constants";
-import InterviewCard from "@/Components/InterviewCard";
+import InterviewCard from "@/components/InterviewCard";
 
 const Page = ()=>{
     return(

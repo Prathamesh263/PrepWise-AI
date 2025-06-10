@@ -1,5 +1,5 @@
 import React from 'react';
-import Agent from "@/Components/Agent";
+import Agent from "@/components/Agent";
 const Page =()=>{
     return(
         <>

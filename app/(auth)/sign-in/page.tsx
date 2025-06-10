@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import AuthForm from "@/Components/AuthForm";
+import AuthForm from "@/components/AuthForm";
 
 const Page =()=>{
     return <AuthForm type="sign-in" />
