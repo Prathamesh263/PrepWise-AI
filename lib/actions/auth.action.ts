@@ -101,7 +101,7 @@ export async function setSessionCookie(idToken: string) {
       secure: process.env.NODE_ENV === 'production',
       path: '/',
       sameSite: 'lax',
-      domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : 'localhost'
+      // domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : 'localhost'
     });
   } catch (error) {
     console.error('Error setting session cookie:', error);
