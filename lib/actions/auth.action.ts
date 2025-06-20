@@ -100,7 +100,8 @@ export async function setSessionCookie(idToken: string) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       path: '/',
-      sameSite: 'lax'
+      sameSite: 'lax',
+      domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : 'localhost'
     });
   } catch (error) {
     console.error('Error setting session cookie:', error);
