@@ -152,40 +152,40 @@ export async function isAuthenticated() {
 }
 
 
-// ---------- 🔹 8. Get Interviews by User ----------
-export async function getInterviewByUserId(userId: string): Promise<Interview[] | null> {
-  if (!userId) return null;
+// // ---------- 🔹 8. Get Interviews by User ----------
+// export async function getInterviewByUserId(userId: string): Promise<Interview[] | null> {
+//   if (!userId) return null;
 
-  try {
-    const snapshot = await db
-      .collection("interviews")
-      .where("userId", "==", userId)
-      .orderBy("createdAt", "desc")
-      .get();
+//   try {
+//     const snapshot = await db
+//       .collection("interviews")
+//       .where("userId", "==", userId)
+//       .orderBy("createdAt", "desc")
+//       .get();
 
-    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Interview[];
-  } catch (err) {
-    console.error("getInterviewsByUserId Error:", err);
-    return null;
-  }
-}
+//     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Interview[];
+//   } catch (err) {
+//     console.error("getInterviewsByUserId Error:", err);
+//     return null;
+//   }
+// }
 
-// ---------- 🔹 9. Get Latest Interviews excluding current user ----------
-export async function getLatestInterview({ userId, limit = 20 }: { userId: string; limit?: number }): Promise<Interview[] | null> {
-  if (!userId) return null;
+// // ---------- 🔹 9. Get Latest Interviews excluding current user ----------
+// export async function getLatestInterview({ userId, limit = 20 }: { userId: string; limit?: number }): Promise<Interview[] | null> {
+//   if (!userId) return null;
 
-  try {
-    const snapshot = await db
-      .collection("interviews")
-      .orderBy("createdAt", "desc")
-      .where("finalized", "==", true)
-      .where("userId", "!=", userId)
-      .limit(limit)
-      .get();
+//   try {
+//     const snapshot = await db
+//       .collection("interviews")
+//       .orderBy("createdAt", "desc")
+//       .where("finalized", "==", true)
+//       .where("userId", "!=", userId)
+//       .limit(limit)
+//       .get();
 
-    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Interview[];
-  } catch (err) {
-    console.error("getLatestInterviews Error:", err);
-    return null;
-  }
-}
+//     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Interview[];
+//   } catch (err) {
+//     console.error("getLatestInterviews Error:", err);
+//     return null;
+//   }
+// }

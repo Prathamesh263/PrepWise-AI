@@ -160,22 +160,39 @@
 
 @layer components {
   .btn-call {
-    @apply inline-block px-7 py-3 font-bold text-sm leading-5 text-white transition-colors duration-150 bg-success-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-success-200 hover:bg-success-200 min-w-28 cursor-pointer items-center justify-center overflow-visible;
+    @apply relative flex items-center justify-center gap-2 rounded-full bg-success-100 px-8 py-4 text-white transition-all hover:bg-success-200;
+  }
 
-    .span {
-      @apply bg-success-100 h-[85%] w-[65%];
-    }
+  .btn-call:disabled {
+    @apply cursor-not-allowed opacity-70 hover:bg-success-100;
   }
 
   .btn-disconnect {
-    @apply inline-block px-7 py-3 text-sm font-bold leading-5 text-white transition-colors duration-150 bg-destructive-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-destructive-200 hover:bg-destructive-200 min-w-28;
+    @apply relative flex items-center justify-center gap-2 rounded-full bg-destructive-100 px-8 py-4 text-white transition-all hover:bg-destructive-200;
+  }
+
+  .btn-disconnect:disabled {
+    @apply cursor-not-allowed opacity-70 hover:bg-destructive-100;
+  }
+
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   .btn-upload {
     @apply flex min-h-14 w-full items-center justify-center gap-1.5 rounded-md;
   }
   .btn-primary {
-    @apply w-fit !bg-primary-200 !text-dark-100 hover:!bg-primary-200/80 !rounded-full !font-bold px-5 cursor-pointer min-h-10;
+    @apply w-fit !bg-primary-200 !text-dark-100 hover:!bg-primary-200/80 !rounded-full !font-bold px-5 cursor-pointer min-h-10 transition-all duration-300 hover:shadow-md hover:scale-105 active:scale-95;
   }
   .btn-secondary {
     @apply w-fit !bg-dark-200 !text-primary-200 hover:!bg-dark-200/80 !rounded-full !font-bold px-5 cursor-pointer min-h-10;
@@ -262,15 +279,15 @@
   }
 
   .root-layout {
-    @apply flex mx-auto max-w-7xl flex-col gap-12 my-12 px-16 max-sm:px-4 max-sm:my-8;
+    @apply flex mx-auto max-w-7xl flex-col gap-12 my-12 px-16 max-lg:px-8 max-md:px-6 max-sm:px-4 max-sm:my-8;
   }
 
   .card-cta {
-    @apply flex flex-row blue-gradient-dark rounded-3xl px-16 py-6 items-center justify-between max-sm:px-4;
+    @apply flex flex-row blue-gradient-dark rounded-3xl px-16 py-12 items-center justify-between max-lg:px-12 max-md:px-8 max-sm:px-4 max-sm:py-8 max-sm:flex-col max-sm:gap-8 transition-all duration-300 hover:shadow-xl;
   }
 
   .interviews-section {
-    @apply flex flex-wrap gap-4 max-lg:flex-col w-full items-stretch;
+    @apply grid grid-cols-3 gap-6 max-xl:grid-cols-2 max-lg:grid-cols-1 w-full items-stretch;
   }
 
   .interview-text {
@@ -286,10 +303,10 @@
   }
 
   .card-interview {
-    @apply dark-gradient rounded-2xl min-h-full flex flex-col p-6 relative overflow-hidden gap-10 justify-between;
+    @apply dark-gradient rounded-2xl min-h-full flex flex-col p-6 relative overflow-hidden gap-10 justify-between transition-all duration-300 hover:shadow-lg hover:scale-[1.02];
 
     .badge-text {
-      @apply text-sm font-semibold capitalize;
+      @apply text-sm font-semibold capitalize bg-primary-200/20 backdrop-blur-sm;
     }
   }
 }

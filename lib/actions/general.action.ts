@@ -6,39 +6,30 @@ import { google } from "@ai-sdk/google";
 import { feedbackSchema } from "@/constants";
 
 export async function getInterviewByUserId(userId: string): Promise<Interview[] | null> {
-  if (!userId) return null;
-
-  try {
-    const snapshot = await db
-        .collection("interviews")
-        .where("userId", "==", userId)
-        .orderBy("createdAt", "desc")
-        .get();
-
-    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Interview[];
-  } catch (err) {
-    console.error("getInterviewsByUserId Error:", err);
-    return null;
-  }
+  const interviews=await db
+  .collection("interviews")
+  .where("userId", "==", userId)
+  .get();
+  return interviews.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Interview[];
 }
 
-export async function getLatestInterview({ userId, limit = 20 }: { userId: string; limit?: number }): Promise<Interview[] | null> {
-  if (!userId) return null;
+export async function getLatestInterviews(
+  params: GetLatestInterviewsParams
+): Promise<Interview[] | null> {
+  const { userId, limit = 20 } = params;
 
-  try {
-    const snapshot = await db
-        .collection("interviews")
-        .orderBy("createdAt", "desc")
-        .where("finalized", "==", true)
-        .where("userId", "!=", userId)
-        .limit(limit)
-        .get();
+  const interviews = await db
+    .collection("interviews")
+    .orderBy("createdAt", "desc")
+    .where("finalized", "==", true)
+    .where("userId", "!=", userId)
+    .limit(limit)
+    .get();
 
-    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Interview[];
-  } catch (err) {
-    console.error("getLatestInterviews Error:", err);
-    return null;
-  }
+  return interviews.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Interview[];
 }
 
 export async function getInterviewById(id: string): Promise<Interview | null> {
