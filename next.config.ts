@@ -7,8 +7,10 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   experimental: {
-    appDir: true,
+    // Remove appDir (deprecated in Next.js 15+)
+    serverActions: true, // Keep if you're using server actions
   },
+  output: 'standalone', // Recommended for Vercel deployments
   async headers() {
     return [
       {
