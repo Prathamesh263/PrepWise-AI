@@ -62,7 +62,7 @@ export async function signIn(params: SignInParams) {
     }
 
     await setSessionCookie(idToken);
-    
+
     return {
       success: true,
       message: "Successfully signed in."
@@ -80,21 +80,21 @@ export async function signIn(params: SignInParams) {
 export async function setSessionCookie(idToken: string) {
   try {
     const cookieStore = await cookies();
-    
+
     // Verify the ID token first
     await auth.verifyIdToken(idToken);
-    
+
     const sessionCookie = await auth.createSessionCookie(idToken, {
       expiresIn: SESSION_DURATION * 1000,
     });
-    
+
     // Verify the session cookie was created
     await auth.verifySessionCookie(sessionCookie);
 
     if(!sessionCookie){
       console.log('Session cookie is not created');
     }
-    
+
     cookieStore.set('session', sessionCookie, {
       maxAge: SESSION_DURATION,
       httpOnly: true,

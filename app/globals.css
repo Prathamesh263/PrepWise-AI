@@ -309,7 +309,37 @@
       @apply text-sm font-semibold capitalize bg-primary-200/20 backdrop-blur-sm;
     }
   }
+  .gradient-button-signout {
+    --color-1: #220000;
+    --color-2: #6d1f1f;
+    --color-3: #964646;
+    --color-4: #a5a5f1;
+    --border-angle: 200deg;
+    --border-color-1: hsla(0, 75%, 90%, 0.6);
+    --border-color-2: hsla(0, 50%, 90%, 0.15);
+  }
+
+  .gradient-button-signout:hover {
+    --pos-x: 0%;
+    --pos-y: 95.51%;
+    --spread-x: 110.24%;
+    --spread-y: 110.2%;
+    --color-1: #200000;
+    --color-2: #a5a5f1;
+    --color-3: #964646;
+    --color-4: #6d1f1f;
+    --color-5: #000;
+    --stop-1: 0%;
+    --stop-2: 10%;
+    --stop-3: 35.44%;
+    --stop-4: 71.34%;
+    --stop-5: 90.76%;
+    --border-angle: 210deg;
+    --border-color-1: hsla(0, 75%, 90%, 0.2);
+    --border-color-2: hsla(0, 50%, 90%, 0.75);
+  }
 }
+
 
 @utility dark-gradient {
   @apply bg-gradient-to-b from-[#1A1C20] to-[#08090D];
