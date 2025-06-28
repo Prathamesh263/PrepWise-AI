@@ -6,6 +6,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  experimental: {
+    appDir: true,
+  },
   async headers() {
     return [
       {
@@ -13,15 +16,15 @@ const nextConfig = {
         headers: [
           {
             key: 'Access-Control-Allow-Origin',
-            value: '*'
+            value: '*',
           },
           {
             key: 'Access-Control-Allow-Methods',
-            value: 'POST,OPTIONS'
+            value: 'POST,OPTIONS',
           },
           {
             key: 'Access-Control-Allow-Headers',
-            value: 'Content-Type'
+            value: 'Content-Type',
           },
         ],
       },
@@ -29,4 +32,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
