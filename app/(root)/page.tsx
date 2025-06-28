@@ -93,3 +93,8 @@
 // }
 //
 // export default Home;
+// app/(root)/page.tsx
+
+export default function Home() {
+    return null; // returns nothing but is still a valid component
+}
