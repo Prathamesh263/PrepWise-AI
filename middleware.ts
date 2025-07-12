@@ -1,9 +1,11 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { isAuthenticated } from '@/lib/actions/auth.action';
 
 export async function middleware(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
-    const isAuth = await isAuthenticated();
+    
+    // Get auth token from cookies (simpler approach for Edge Runtime)
+    const authToken = request.cookies.get('session')?.value;
+    const isAuth = !!authToken;
 
     // Protected routes (require login)
     const protectedRoutes = ['/', '/dashboard'];
