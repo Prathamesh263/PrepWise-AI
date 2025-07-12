@@ -18,9 +18,19 @@ export const revalidate = 0;
 export default async function Home() {
     const user = await getCurrentUser();
 
+    if (!user?.id) {
+        return (
+            <main className="w-full">
+                <div className="flex justify-center items-center h-screen">
+                    <p>Please sign in to continue</p>
+                </div>
+            </main>
+        );
+    }
+
     const [userInterviews, allInterview] = await Promise.all([
-        getInterviewByUserId(user?.id!),
-        getLatestInterviews({ userId: user?.id! }),
+        getInterviewByUserId(user.id),
+        getLatestInterviews({ userId: user.id }),
     ]);
 
     const hasPastInterviews = userInterviews?.length > 0;
