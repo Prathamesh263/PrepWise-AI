@@ -1,9 +1,11 @@
 'use server';
 
 import { db } from "@/firebase/admin";
-import { generateObject } from "ai";
+import { generateObject, generateText } from "ai";
 import { google } from "@ai-sdk/google";
 import { feedbackSchema } from "@/constants";
+import { getRandomInterviewCover } from "@/lib/utils";
+import { getCurrentUser } from "@/lib/actions/auth.action";
 
 export async function getInterviewByUserId(userId: string): Promise<Interview[] | null> {
   const interviews=await db
@@ -110,4 +112,84 @@ export async function getFeedbackByInterviewId(params: GetFeedbackByInterviewIdP
     id: feedbackDoc.id,
     ...feedbackDoc.data(),
   } as Feedback;
+}
+
+export async function createInterview(params: Omit<CreateInterviewParams, 'userid'>) {
+  const { role, level, type, techstack, amount } = params;
+
+  try {
+    console.log("Creating interview with params:", params);
+    
+    // Get current user
+    const user = await getCurrentUser();
+    if (!user?.id) {
+      console.error("User not authenticated");
+      return {
+        success: false,
+        error: "User not authenticated"
+      };
+    }
+
+    console.log("User authenticated:", user.id);
+
+    // Generate questions using AI
+    const { text: questions } = await generateText({
+      model: google("gemini-2.0-flash-001"),
+      prompt: `Prepare questions for a job interview.
+        The job role is ${role}.
+        The job experience level is ${level}.
+        The tech stack used in the job is: ${techstack}.
+        The focus between behavioural and technical questions should lean towards: ${type}.
+        The amount of questions required is: ${amount}.
+        Please return only the questions, without any additional text.
+        The questions are going to be read by a voice assistant so do not use "/" or "*" or any other special characters which might break the voice assistant.
+        Return the questions formatted like this:
+        ["Question 1", "Question 2", "Question 3"]
+        
+        Thank you! <3
+      `,
+    });
+
+    console.log("Generated questions:", questions);
+
+    // Parse questions safely
+    let parsedQuestions;
+    try {
+      parsedQuestions = JSON.parse(questions);
+    } catch (parseError) {
+      console.error("Failed to parse questions:", parseError);
+      // Fallback to simple array if parsing fails
+      parsedQuestions = questions.split('\n').filter(q => q.trim()).map(q => q.trim());
+    }
+
+    // Create interview document
+    const interview = {
+      role,
+      type,
+      level,
+      techstack: techstack.split(",").map(tech => tech.trim()),
+      questions: parsedQuestions,
+      userId: user.id,
+      finalized: true,
+      coverImage: getRandomInterviewCover(),
+      createdAt: new Date().toISOString(),
+    };
+
+    console.log("Saving interview to Firestore:", interview);
+
+    const interviewRef = await db.collection("interviews").add(interview);
+
+    console.log("Interview created successfully with ID:", interviewRef.id);
+
+    return {
+      success: true,
+      interviewId: interviewRef.id,
+    };
+  } catch (error) {
+    console.error("Error creating interview:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to create interview"
+    };
+  }
 }

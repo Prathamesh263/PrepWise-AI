@@ -25,7 +25,7 @@ interface AgentProps {
   userId: string;
   interviewId: string;
   feedbackId?: string;
-  type: "generate" | "feedback";
+  type: "interview" | "feedback";
   questions?: string[];
 }
 
@@ -43,6 +43,7 @@ const Agent = ({
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [lastMessage, setLastMessage] = useState<string>("");
   const [interviewQuestions, setInterviewQuestions] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchInterview = async () => {
@@ -120,9 +121,7 @@ const Agent = ({
     };
 
     if (callStatus === CallStatus.FINISHED) {
-      if (type === "generate") {
-        router.push("/");
-      } else {
+      if (type === "interview") {
         handleGenerateFeedback();
       }
     }
@@ -130,28 +129,31 @@ const Agent = ({
 
   const handleCall = async () => {
     setCallStatus(CallStatus.CONNECTING);
+    setError(null); // Clear any previous errors
 
     try {
-      if (type === "generate") {
-        await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!, {
-          variableValues: {
-            username: userName,
-            userid: userId,
-          },
-        });
-      } else {
-        const questionsToUse = interviewQuestions.length > 0
-            ? interviewQuestions
-            : questions || [];
-
-        await vapi.start(interviewer, {
-          variableValues: {
-            questions: questionsToUse.join("\n"),
-          },
-        });
+      // Check if VAPI token is available
+      const vapiToken = process.env.NEXT_PUBLIC_VAPI_WEB_TOKEN;
+      if (!vapiToken) {
+        throw new Error("VAPI Web Token is not configured. Please check your environment variables.");
       }
+
+      const questionsToUse = interviewQuestions.length > 0
+          ? interviewQuestions
+          : questions || [];
+
+      if (questionsToUse.length === 0) {
+        throw new Error("No questions available for the interview. Please try again.");
+      }
+
+      await vapi.start(interviewer, {
+        variableValues: {
+          questions: questionsToUse.join("\n"),
+        },
+      });
     } catch (error) {
       console.error("Failed to start call:", error);
+      setError(error instanceof Error ? error.message : 'Failed to start interview');
       setCallStatus(CallStatus.INACTIVE);
     }
   };
@@ -222,6 +224,23 @@ const Agent = ({
                 </p>
               </div>
             </div>
+        )}
+
+        {/* Error Display */}
+        {error && (
+          <div className="w-full max-w-2xl p-4 rounded-xl bg-red-900/50 border border-red-700 backdrop-blur-sm">
+            <div className="text-center">
+              <p className="text-red-200 text-sm">
+                {error}
+              </p>
+              <button
+                onClick={() => setError(null)}
+                className="mt-2 text-red-300 hover:text-red-100 text-xs underline"
+              >
+                Dismiss
+              </button>
+            </div>
+          </div>
         )}
 
         {/* Button with animation */}

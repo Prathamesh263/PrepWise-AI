@@ -52,7 +52,7 @@ interface AgentProps {
   userId?: string;
   interviewId?: string;
   feedbackId?: string;
-  type: "generate" | "interview";
+  type: "interview" | "feedback";
   questions?: string[];
 }
 
@@ -96,4 +96,13 @@ interface InterviewFormProps {
 
 interface TechIconProps {
   techStack: string[];
+}
+
+interface CreateInterviewParams {
+  role: string;
+  level: string;
+  type: string;
+  techstack: string;
+  amount: number;
+  userid?: string;
 }
